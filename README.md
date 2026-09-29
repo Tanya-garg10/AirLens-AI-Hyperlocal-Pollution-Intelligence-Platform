@@ -4,15 +4,11 @@
 > 
 > *Submission for Build with AI: Code for Communities Hackathon — Track 2: Clean Air & Climate Resilience*
 
----
-
 ## 1. Executive Summary & Vision
 
 Air quality in metropolitan areas is often measured only by widely dispersed government continuous ambient monitoring stations (CAAQMS). While valuable for citywide averages, these stations cannot capture localized, episodic emissions—such as unpaved construction dust clouds, unauthorized municipal waste burning, or localized industrial plume releases.
 
 **AirLens AI** bridges citizen environmental vigilance with rapid municipal action. Citizens capture smartphone photos of visible smoke, dust, or burning. Google Gemini AI performs structured, preliminary computer vision triage. Meteorological dispersion vectors forecast short-term downwind exposure corridors, and authority dispatchers review verified evidence with clear statutory audit trails.
-
----
 
 ## 2. Key Capabilities & Features
 
@@ -50,16 +46,12 @@ Air quality in metropolitan areas is often measured only by widely dispersed gov
 - **Category Proportions:** Interactive donut charts illustrating incident distributions.
 - **CSV Data Export:** One-click download of the complete incident dataset for statutory reporting.
 
----
-
 ## 3. Technology Stack
 
 - **Frontend:** React 19, TypeScript, Tailwind CSS, Lucide Icons, Recharts, Motion.
 - **Backend & Middleware:** Node.js, Express, tsx.
 - **AI Services:** `@google/genai` TypeScript SDK (calling `gemini-3.8-flash` on server-side).
 - **Meteorological & Air Quality APIs:** Open-Meteo Live Forecast API & Open-Meteo European/US EPA Air Quality Model.
-
----
 
 ## 4. Setup & Running Locally
 
@@ -90,8 +82,6 @@ npm run dev
 
 Open `http://localhost:3000` in your browser.
 
----
-
 ## 5. Environment Variables Guide
 
 Copy `.env.example` to `.env`:
@@ -105,38 +95,7 @@ GEMINI_API_KEY="your-gemini-api-key"
 PORT=3000
 ```
 
----
-
-## 6. 3-Minute Hackathon Demo Script
-
-1. **Landing Page (0:00 - 0:30):**
-   - Introduce the tagline: *"See the Invisible. Predict the Impact. Act Before It Spreads."*
-   - Drag the **Community Impact Simulator slider** to demonstrate the contrast between unmitigated fugitive emissions and rapid containment.
-
-2. **Environmental Command Center (0:30 - 1:00):**
-   - Switch between demo cities (Delhi NCR, Bengaluru, Mumbai).
-   - Point out the **Live Open-Meteo Weather** (wind speed, direction) and **Air Quality PM2.5/PM10** gauges.
-   - Show the detected potential hotspot clusters and 24h particulate trend.
-
-3. **Citizen Reporting & Gemini AI (1:00 - 1:45):**
-   - Click **"Report Incident"**.
-   - Click one of the **1-Click Test Photos** (e.g., *Biomass & Garbage Fire Smoke*).
-   - Click **"Analyze Image with Gemini AI"**. Show Gemini detecting visible plume indicators, confidence rating, and scientific limitations.
-   - Click **"Submit Citizen Observation"** and notice the generated Report ID (e.g. `AL-2026-XXXX`).
-
-4. **Hotspot Map & Wind Dispersion (1:45 - 2:15):**
-   - Open the **Hotspot Map**.
-   - Locate the newly submitted report pin and the surrounding 2.5 km proximity cluster.
-   - Toggle the **Wind Vectors** to show downwind plume drift.
-
-5. **Risk Intelligence & Authority Triage (2:15 - 3:00):**
-   - Open **Risk Intelligence** to explain the transparent factor weights and downwind affected neighborhoods.
-   - Switch to the **Authority Triage Center**. Select the report, click **"Generate Brief"** to see Gemini assemble a tactical municipal response, change verification status to **Verified**, assign the **Municipal Waste Enforcement Wing**, and log an internal note.
-   - Return to the Command Center to show updated triage counts in real time!
-
----
-
-## 7. Responsible AI & Ethical Boundaries
+## 6. Responsible AI & Ethical Boundaries
 
 1. **Visible Indicators Only:** Gemini analyzes photographic patterns (optical opacity, plume geometry, unshielded piles).
 2. **No False Sensor Claims:** The platform never claims a smartphone photo replaces calibrated PM2.5 laser photometers or gas chromatography.
