@@ -1,0 +1,6 @@
+{
+  "name": "AirLens AI — Hyperlocal Pollution Intelligence Platform",
+  "description": "Hyperlocal pollution intelligence platform using Google Gemini AI, citizen visual reporting, weather dispersion modeling, and authority incident response.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
