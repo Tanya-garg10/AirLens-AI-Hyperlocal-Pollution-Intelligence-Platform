@@ -318,7 +318,7 @@ export function AuthorityPage({
             <p className="text-xs opacity-90 mt-0.5">
               {userRole === 'citizen' && 'Public read-only oversight. Real-time municipal triage tracking and community corroboration.'}
               {userRole === 'inspector' && 'Equipped with ground verification checklists, on-site anti-smog equipment dispatch, and penalty challan logging.'}
-              {userRole === 'officer' && 'Authorized to dispatch municipal enforcement squads, enforce SLA targets, and generate Gemini executive briefs.'}
+              {userRole === 'officer' && 'Authorized to dispatch municipal enforcement squads, enforce SLA targets, and generate GPT-4o executive briefs.'}
               {userRole === 'pcb_lead' && 'Statutory authority under Air Act 1981. Audit Consent to Operate IDs, continuous sensors, and issue closure orders.'}
             </p>
           </div>
@@ -615,7 +615,7 @@ export function AuthorityPage({
                     <div className="p-3 rounded-xl bg-[#071713] border border-[#5CF2B2]/15 space-y-1">
                       <div className="flex justify-between font-mono text-[10px]">
                         <span className="text-[#5CF2B2] font-bold flex items-center gap-1">
-                          <Eye className="w-3 h-3" /> Gemini AI Vision Assessment
+                          <Eye className="w-3 h-3" /> GPT-4o AI Vision Assessment
                         </span>
                         <span className="text-[#A6C7B5] tabular-nums">
                           {Math.round(activeReport.aiAnalysis.confidence * 100)}% match
@@ -943,7 +943,7 @@ export function AuthorityPage({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5 text-xs font-heading font-bold text-[#5CF2B2]">
                         <Sparkles className="w-4 h-4 text-[#5CF2B2]" />
-                        <span>Gemini Automated Ward Executive Briefing</span>
+                        <span>GPT-4o Automated Ward Executive Briefing</span>
                       </div>
                       <button
                         onClick={handleGenerateBriefing}

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import sensorFieldImg from '../assets/images/vision_lab_sensor_field_1790691036316.jpg';
 import { 
   Cpu, 
   Upload, 
@@ -83,13 +84,13 @@ export function AnalysisLabPage({ onNavigateToReport }: AnalysisLabPageProps) {
             <Cpu className="w-3.5 h-3.5" />
             <span>Multimodal Vision Diagnostics</span>
             <span className="text-[#8A9A92]">·</span>
-            <span className="text-[#A6C7B5]">Google Gemini 3.8 Flash</span>
+            <span className="text-[#A6C7B5]">OpenAI GPT-4o</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-white tracking-tight">
             AI Vision Analysis Lab
           </h1>
           <p className="text-xs text-[#8A9A92] mt-1 max-w-2xl leading-relaxed">
-            Interrogate photographic observations with Gemini AI. Evaluates visible optical opacity, suspended particulate geometry, and explicit scientific boundary limitations.
+            Interrogate photographic observations with GPT-4o AI. Evaluates visible optical opacity, suspended particulate geometry, and explicit scientific boundary limitations.
           </p>
         </div>
 
@@ -197,12 +198,12 @@ export function AnalysisLabPage({ onNavigateToReport }: AnalysisLabPageProps) {
                 {isAnalyzing ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin" />
-                    <span>Gemini Vision Triage Running...</span>
+                    <span>GPT-4o Vision Triage Running...</span>
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-4 h-4" />
-                    <span>Run Gemini AI Visual Analysis</span>
+                    <span>Run GPT-4o AI Visual Analysis</span>
                   </>
                 )}
               </button>
@@ -212,7 +213,7 @@ export function AnalysisLabPage({ onNavigateToReport }: AnalysisLabPageProps) {
           {/* Contextual Hardware Sensor Station Asset */}
           <div className="p-4 rounded-2xl bg-[#0C1513] border border-[#5CF2B2]/15 flex items-center gap-4">
             <img
-              src="/src/assets/images/vision_lab_sensor_field_1790691036316.jpg"
+              src={sensorFieldImg}
               alt="Environmental monitoring node"
               className="w-16 h-16 rounded-xl object-cover border border-[#5CF2B2]/25 shrink-0"
             />
@@ -231,7 +232,7 @@ export function AnalysisLabPage({ onNavigateToReport }: AnalysisLabPageProps) {
             <div className="flex items-center justify-between pb-3 border-b border-[#5CF2B2]/12">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-[#5CF2B2]" />
-                <h2 className="font-heading font-bold text-sm text-white">Gemini 3.8 Flash Diagnostics</h2>
+                <h2 className="font-heading font-bold text-sm text-white">GPT-4o Flash Diagnostics</h2>
               </div>
               {analysisResult && (
                 <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold ${
@@ -255,7 +256,7 @@ export function AnalysisLabPage({ onNavigateToReport }: AnalysisLabPageProps) {
               <div className="py-24 text-center space-y-3 text-[#8A9A92]">
                 <Cpu className="w-12 h-12 text-[#123C30] mx-auto" />
                 <p className="text-xs max-w-xs mx-auto">
-                  Click <strong className="text-white">Run Gemini AI Visual Analysis</strong> to inspect visible physical indicators, particulate geometry, and plume opacity.
+                  Click <strong className="text-white">Run GPT-4o AI Visual Analysis</strong> to inspect visible physical indicators, particulate geometry, and plume opacity.
                 </p>
               </div>
             )}
@@ -264,7 +265,7 @@ export function AnalysisLabPage({ onNavigateToReport }: AnalysisLabPageProps) {
               <div className="py-24 text-center space-y-3">
                 <RefreshCw className="w-8 h-8 text-[#5CF2B2] animate-spin mx-auto" />
                 <div className="font-heading font-bold text-sm text-white">
-                  Interrogating Pixel Matrices with Google Gemini...
+                  Interrogating Pixel Matrices with GPT-4o AI...
                 </div>
                 <p className="text-xs text-[#8A9A92] max-w-sm mx-auto">
                   Extracting edge diffusion, light refraction signatures, and optical opacity boundaries.

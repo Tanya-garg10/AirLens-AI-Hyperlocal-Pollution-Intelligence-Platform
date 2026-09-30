@@ -121,7 +121,7 @@ export function AIExecutiveReportModal({
               {isLoading ? (
                 <>
                   <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                  <span>Synthesizing with Gemini...</span>
+                  <span>Synthesizing with GPT-4o...</span>
                 </>
               ) : (
                 <>
@@ -238,7 +238,7 @@ export function AIExecutiveReportModal({
 
               {/* Disclaimer */}
               <div className="pt-4 border-t border-[#5CF2B2]/10 text-[10px] font-mono text-[#8A9A92] text-center">
-                This dossier is synthesized using Google Gemini AI grounded in verified citizen evidence and Open-Meteo European/EPA models.
+                This dossier is synthesized using OpenAI GPT-4o grounded in verified citizen evidence and Open-Meteo European/EPA models.
               </div>
 
             </div>
@@ -251,7 +251,7 @@ export function AIExecutiveReportModal({
                 No Briefing Generated Yet
               </h4>
               <p className="text-xs text-[#8A9A92] max-w-sm mx-auto">
-                Select your preferred period above and click "Generate Briefing" to compile a Gemini-synthesized executive dossier for municipal authorities.
+                Select your preferred period above and click "Generate Briefing" to compile a GPT-4o-synthesized executive dossier for municipal authorities.
               </p>
             </div>
           )}

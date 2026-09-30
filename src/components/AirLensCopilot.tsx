@@ -278,7 +278,7 @@ export function AirLensCopilot({
                   <RefreshCw className="w-3.5 h-3.5 animate-spin" />
                 </div>
                 <div className="px-4 py-3 rounded-2xl bg-[#0E1D19] border border-[#5CF2B2]/20 text-[#8A9A92] flex items-center gap-2 text-xs">
-                  <span>Consulting Gemini & regional telemetry models...</span>
+                  <span>Consulting GPT-4o & regional telemetry models...</span>
                   <div className="flex gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#5CF2B2] animate-bounce" />
                     <span className="w-1.5 h-1.5 rounded-full bg-[#5CF2B2] animate-bounce [animation-delay:0.2s]" />

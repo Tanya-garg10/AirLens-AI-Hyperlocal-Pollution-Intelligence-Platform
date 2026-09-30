@@ -874,7 +874,7 @@ export function ReportPage({ city, onReportSubmitted, onNavigate, initialPrefill
               }}
               className="px-6 py-3 rounded-xl bg-[#5CF2B2] hover:bg-[#A6C7B5] disabled:opacity-50 text-[#071713] font-heading font-bold text-xs shadow-lg shadow-[#5CF2B2]/20 flex items-center gap-2 transition-all hover:scale-102"
             >
-              <span>Run Gemini Vision Triage & Review</span>
+              <span>Run GPT-4o Vision Triage & Review</span>
               <Sparkles className="w-4 h-4" />
             </button>
           </div>
@@ -885,8 +885,8 @@ export function ReportPage({ city, onReportSubmitted, onNavigate, initialPrefill
       {currentStep === 5 && (
         <div className="p-6 sm:p-8 rounded-3xl bg-[#0C1D18] border border-[#5CF2B2]/20 space-y-6 shadow-xl animate-in fade-in duration-200">
           <div>
-            <h2 className="text-lg font-heading font-bold text-white">05. Gemini Vision Review & Final Submission</h2>
-            <p className="text-xs text-[#8A9A92]">Google Gemini preliminary analysis checks optical plume characteristics before registering into the municipal queue.</p>
+            <h2 className="text-lg font-heading font-bold text-white">05. GPT-4o Vision Review & Final Submission</h2>
+            <p className="text-xs text-[#8A9A92]">GPT-4o preliminary analysis checks optical plume characteristics before registering into the municipal queue.</p>
           </div>
 
           {/* Side-by-Side Review Summary */}
@@ -914,7 +914,7 @@ export function ReportPage({ city, onReportSubmitted, onNavigate, initialPrefill
               <div className="flex items-center justify-between pb-2 border-b border-[#5CF2B2]/10">
                 <span className="text-xs font-heading font-bold text-[#5CF2B2] flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-[#5CF2B2]" />
-                  <span>Gemini AI Visual Triage</span>
+                  <span>GPT-4o AI Visual Triage</span>
                 </span>
                 {isAnalyzing ? (
                   <span className="text-[10px] font-mono text-[#F6B94B] flex items-center gap-1 animate-pulse">

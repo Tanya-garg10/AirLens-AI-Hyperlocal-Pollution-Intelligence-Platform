@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import satelliteImg from '../assets/images/satellite_pollution_plume_1790691020109.jpg';
 import { 
   Plus, 
   Minus, 
@@ -196,7 +197,7 @@ export function InteractiveMap({
             }}
           >
             <img
-              src="/src/assets/images/satellite_pollution_plume_1790691020109.jpg"
+              src={satelliteImg}
               alt="Satellite pollution plume composite"
               className="w-full h-full object-cover opacity-65 mix-blend-screen"
             />
@@ -600,7 +601,7 @@ export function InteractiveMap({
             <div className="bg-[#071713]/80 border border-[#5CF2B2]/15 p-3 rounded-xl mb-3 text-xs">
               <div className="flex items-center justify-between text-[11px] text-[#8A9A92] mb-1">
                 <span className="font-semibold text-[#5CF2B2] flex items-center gap-1 font-heading">
-                  <Eye className="w-3 h-3" /> Gemini AI Preliminary Observation
+                  <Eye className="w-3 h-3" /> GPT-4o AI Preliminary Observation
                 </span>
                 <span className="font-mono text-[10px] text-[#A6C7B5] tabular-nums">
                   {Math.round(selectedReport.aiAnalysis.confidence * 100)}% match

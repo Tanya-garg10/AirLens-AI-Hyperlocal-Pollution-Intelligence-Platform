@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { 
-  Wind, 
-  MapPin, 
-  Leaf, 
-  Flame, 
-  ShieldCheck, 
-  Sparkles, 
-  Compass, 
-  ArrowRight, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Cpu, 
-  Eye, 
+import {
+  Wind,
+  MapPin,
+  Leaf,
+  Flame,
+  ShieldCheck,
+  Sparkles,
+  Compass,
+  ArrowRight,
+  CheckCircle2,
+  AlertTriangle,
+  Cpu,
+  Eye,
   Activity,
   Layers,
   Shield,
@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { WorkspaceTab } from '../components/Sidebar';
 import { BrandLogo } from '../components/BrandLogo';
+import heroImg from '../assets/images/hero_atmospheric_earth_1790691003311.jpg';
 
 interface LandingPageProps {
   onNavigate: (tab: WorkspaceTab) => void;
@@ -112,7 +113,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
 
               {/* Exact Subtitle from Brief */}
               <p className="text-base sm:text-lg text-[#8A9A92] leading-relaxed max-w-2xl font-normal">
-                Hyperlocal pollution intelligence powered by Google Gemini AI, citizen observations, and atmospheric dispersion modeling.
+                Hyperlocal pollution intelligence powered by GPT-4o Vision AI, citizen observations, and atmospheric dispersion modeling.
               </p>
 
               {/* Hero Call to Action Buttons */}
@@ -142,7 +143,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
                 </div>
                 <div>
                   <div className="font-heading font-extrabold text-2xl text-[#82B8E8] tracking-tight tabular-nums">&lt; 3.0s</div>
-                  <div className="text-[11px] text-[#8A9A92] font-mono mt-0.5">Gemini Vision Triage</div>
+                  <div className="text-[11px] text-[#8A9A92] font-mono mt-0.5">GPT-4o Vision Triage</div>
                 </div>
                 <div>
                   <div className="font-heading font-extrabold text-2xl text-[#A6C7B5] tracking-tight tabular-nums">100%</div>
@@ -155,7 +156,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
             <div className="lg:col-span-5 relative">
               <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden border border-[#5CF2B2]/25 shadow-2xl shadow-[#071713]/90 group">
                 <img
-                  src="/src/assets/images/hero_atmospheric_earth_1790691003311.jpg"
+                  src={heroImg}
                   alt="Atmospheric city wind streams"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -199,7 +200,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
             Fixed ambient stations miss what citizen cameras witness every day.
           </h2>
           <p className="text-sm sm:text-base text-[#8A9A92] leading-relaxed">
-            Municipal air monitors are located kilometers apart, averaging regional figures while localized construction plumes, burning refuse verges, and fugitive emissions heavily impact school corridors and neighborhoods. AirLens AI connects citizen visual observations with Google Gemini AI and wind dispersion models to trigger rapid remediation.
+            Municipal air monitors are located kilometers apart, averaging regional figures while localized construction plumes, burning refuse verges, and fugitive emissions heavily impact school corridors and neighborhoods. AirLens AI connects citizen visual observations with OpenAI GPT-4o and wind dispersion models to trigger rapid remediation.
           </p>
         </div>
       </section>
@@ -233,7 +234,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
               <div className="w-12 h-12 rounded-xl bg-[#123C30] text-[#5CF2B2] border border-[#5CF2B2]/25 flex items-center justify-center font-bold text-lg group-hover:scale-105 transition-transform">
                 <Cpu className="w-5 h-5 text-[#5CF2B2]" />
               </div>
-              <h3 className="font-heading font-bold text-white text-base">Gemini 3.8 AI Vision</h3>
+              <h3 className="font-heading font-bold text-white text-base">GPT-4o AI Vision</h3>
               <p className="text-xs text-[#8A9A92] leading-relaxed">
                 Server-side multimodal vision models parse optical plume geometry, opacity, and particulate suspension within seconds.
               </p>
@@ -287,7 +288,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
               {
                 step: '02',
                 title: 'AI Verification',
-                desc: 'Google Gemini 3.8 Flash assesses visual opacity and suggests category and limitations.',
+                desc: 'GPT-4o Vision assesses visual opacity and suggests category and limitations.',
                 color: 'text-[#5CF2B2]',
               },
               {
@@ -401,7 +402,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-[#8A9A92] leading-relaxed pt-2">
               <div className="p-4 rounded-2xl bg-[#071713] border border-[#5CF2B2]/15 space-y-2">
                 <div className="font-bold text-[#5CF2B2] flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" /> What Gemini AI Performs
+                  <CheckCircle2 className="w-4 h-4" /> What GPT-4o AI Performs
                 </div>
                 <p>
                   Identifies visible smoke opacity, optical plume geometry, unpaved earth mover dust clouds, and suggests operational category hypotheses to speed human triage.
@@ -428,7 +429,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
             Ready to Explore Your Atmospheric Environment?
           </h2>
           <p className="text-sm sm:text-base text-[#8A9A92] max-w-xl mx-auto">
-            Launch the Environmental Command Center to view real-time data, explore hotspot maps, and test Gemini AI vision analysis.
+            Launch the Environmental Command Center to view real-time data, explore hotspot maps, and test GPT-4o AI vision analysis.
           </p>
 
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -462,7 +463,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
 
           <div className="font-mono text-[10px] text-[#8A9A92]/70">
-            Powered by Google Gemini 3.8 & Open-Meteo
+            Powered by OpenAI GPT-4o & Open-Meteo
           </div>
         </div>
       </footer>

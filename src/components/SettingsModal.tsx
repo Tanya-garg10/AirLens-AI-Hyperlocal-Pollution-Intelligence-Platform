@@ -157,7 +157,7 @@ export function SettingsModal({
         {/* Setting Group: Intelligence Connections */}
         <div className="p-4 rounded-2xl bg-[#07120F]/60 border border-[#65F0B5]/15 space-y-2 text-xs font-mono">
           <div className="flex items-center justify-between text-[#91A39A]">
-            <span>Google Gemini 3.8 Flash:</span>
+            <span>OpenAI GPT-4o:</span>
             <span className="text-[#65F0B5] font-bold">ACTIVE (Server Proxy)</span>
           </div>
           <div className="flex items-center justify-between text-[#91A39A]">
