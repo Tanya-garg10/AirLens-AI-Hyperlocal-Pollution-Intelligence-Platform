@@ -1,25 +1,26 @@
-import React, { useState, useRef } from 'react';
-import { 
-  Camera, 
-  Upload, 
-  MapPin, 
-  Sparkles, 
-  X, 
-  CheckCircle2, 
-  AlertCircle, 
-  Clock, 
-  Eye, 
-  ShieldCheck, 
-  ArrowRight, 
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import {
+  Camera,
+  Upload,
+  MapPin,
+  Sparkles,
+  X,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+  Eye,
+  ShieldCheck,
+  ArrowRight,
   ArrowLeft,
-  Flame, 
+  Flame,
   RefreshCw,
   ExternalLink,
   Layers,
   Check,
   Mic,
   Volume2,
-  Square
+  Square,
+  ZapOff
 } from 'lucide-react';
 import { 
   CityRegion, 
@@ -74,6 +75,58 @@ export function ReportPage({ city, onReportSubmitted, onNavigate, initialPrefill
   const [violatorProperty, setViolatorProperty] = useState('');
   const [pcbConsentId, setPcbConsentId] = useState('CTO-DPCC-IND-2026-8812');
   const [stackHeightMeters, setStackHeightMeters] = useState('25');
+
+  // Camera Modal State
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const openCamera = useCallback(async () => {
+    setCameraError(null);
+    setIsCameraOpen(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (err: any) {
+      setCameraError(err.name === 'NotAllowedError'
+        ? 'Camera permission denied. Please allow camera access in your browser settings.'
+        : 'Camera not available on this device. Please upload a file instead.');
+    }
+  }, []);
+
+  const closeCamera = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop());
+      streamRef.current = null;
+    }
+    setIsCameraOpen(false);
+    setCameraError(null);
+  }, []);
+
+  const snapPhoto = useCallback(() => {
+    if (!videoRef.current || !canvasRef.current) return;
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d')?.drawImage(video, 0, 0);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+    setImagePreview(dataUrl);
+    setAiAnalysis(null);
+    closeCamera();
+  }, [closeCamera]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => { streamRef.current?.getTracks().forEach(t => t.stop()); };
+  }, []);
 
   // AI & Submission States
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -425,7 +478,7 @@ export function ReportPage({ city, onReportSubmitted, onNavigate, initialPrefill
                 </button>
                 <button
                   type="button"
-                  onClick={() => cameraInputRef.current?.click()}
+                  onClick={openCamera}
                   className="flex-1 py-2.5 px-3 rounded-xl bg-[#071713] hover:bg-[#123C30] border border-[#5CF2B2]/20 text-xs text-white font-mono flex items-center justify-center gap-2 transition-colors"
                 >
                   <Camera className="w-3.5 h-3.5 text-[#5CF2B2]" />
@@ -1041,6 +1094,73 @@ export function ReportPage({ city, onReportSubmitted, onNavigate, initialPrefill
                 Command Center
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden canvas for camera snapshot */}
+      <canvas ref={canvasRef} className="hidden" />
+
+      {/* Camera Capture Modal */}
+      {isCameraOpen && (
+        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-[#0C1513] rounded-3xl border border-[#5CF2B2]/30 overflow-hidden shadow-2xl">
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#5CF2B2]/15">
+              <div className="flex items-center gap-2 text-sm font-heading font-bold text-white">
+                <Camera className="w-4 h-4 text-[#5CF2B2]" />
+                <span>Live Camera Capture</span>
+              </div>
+              <button
+                onClick={closeCamera}
+                className="p-1.5 rounded-xl text-[#8A9A92] hover:text-[#FF6B65] hover:bg-[#123C30]/50 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Video / Error */}
+            <div className="relative bg-black aspect-video">
+              {cameraError ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
+                  <ZapOff className="w-10 h-10 text-[#FF6B65]" />
+                  <p className="text-xs text-[#8A9A92] leading-relaxed">{cameraError}</p>
+                  <button
+                    onClick={closeCamera}
+                    className="px-4 py-2 rounded-xl bg-[#071713] border border-[#5CF2B2]/20 text-xs text-[#F4F8F5] font-mono"
+                  >
+                    Close
+                  </button>
+                </div>
+              ) : (
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
+
+            {/* Snap Button */}
+            {!cameraError && (
+              <div className="flex items-center justify-center gap-4 px-5 py-5">
+                <button
+                  onClick={closeCamera}
+                  className="px-5 py-2.5 rounded-xl bg-[#071713] border border-[#5CF2B2]/15 text-xs text-[#8A9A92] font-mono hover:text-white transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={snapPhoto}
+                  className="px-8 py-3 rounded-2xl bg-[#5CF2B2] hover:bg-[#A6C7B5] text-[#071713] font-heading font-bold text-sm shadow-xl shadow-[#5CF2B2]/25 flex items-center gap-2 transition-all hover:scale-105"
+                >
+                  <Camera className="w-4 h-4" />
+                  <span>Snap Photo</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

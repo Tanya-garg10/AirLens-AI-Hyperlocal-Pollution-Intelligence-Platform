@@ -139,7 +139,7 @@ export default function App() {
   const unreadNotifCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col font-sans antialiased selection:bg-[#65F0B5]/30 selection:text-[#65F0B5] transition-colors duration-300">
+    <div className={`min-h-screen flex flex-col font-sans antialiased selection:bg-[#65F0B5]/30 selection:text-[#65F0B5] transition-colors duration-300 ${isDarkTheme ? 'bg-[#071713] text-[#F4F8F5]' : 'bg-[#F0F5F2] text-[#071713]'}`}>
       
       {/* If on public Landing page, show full cinematic landing view */}
       {currentTab === 'landing' ? (

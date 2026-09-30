@@ -2,6 +2,7 @@
 
 @layer base {
   :root {
+    --bg-primary: #071713;
     --bg-midnight: #071713;
     --bg-charcoal: #0C1513;
     --bg-forest: #123C30;
@@ -19,16 +20,17 @@
   }
 
   html.light {
-    --bg-midnight: #F4F8F5;
-    --bg-charcoal: #EAEFEA;
-    --bg-forest: #DCE5DF;
+    --bg-primary: #F0F5F2;
+    --bg-midnight: #F0F5F2;
+    --bg-charcoal: #E4EDE8;
+    --bg-forest: #C8DDD3;
     --bg-surface: #FFFFFF;
-    --bg-surface-elevated: #F8FAF8;
-    --border-subtle: rgba(18, 60, 48, 0.12);
-    --border-highlight: rgba(18, 60, 48, 0.24);
+    --bg-surface-elevated: #F5FAF7;
+    --border-subtle: rgba(18, 60, 48, 0.14);
+    --border-highlight: rgba(18, 60, 48, 0.28);
     --text-primary: #071713;
-    --text-sage: #2D4C3F;
-    --text-muted: #5A7065;
+    --text-sage: #2D5244;
+    --text-muted: #4A6B5E;
     --accent-mint: #0E8E58;
     --accent-amber: #C47F0C;
     --accent-coral: #D9443E;
@@ -37,7 +39,7 @@
 
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: var(--bg-midnight);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
     transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -117,9 +119,15 @@
   border: 1px solid rgba(92, 242, 178, 0.12);
 }
 
-.html.light .glass-panel {
+html.light .glass-panel {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(18, 60, 48, 0.12);
+}
+
+/* Light mode: override hardcoded dark backgrounds on key containers */
+html.light .workspace-bg {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
 }
