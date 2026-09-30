@@ -8,7 +8,7 @@
 
 Air quality in metropolitan areas is often measured only by widely dispersed government continuous ambient monitoring stations (CAAQMS). While valuable for citywide averages, these stations cannot capture localized, episodic emissions—such as unpaved construction dust clouds, unauthorized municipal waste burning, or localized industrial plume releases.
 
-**AirLens AI** bridges citizen environmental vigilance with rapid municipal action. Citizens capture smartphone photos of visible smoke, dust, or burning. Google Gemini AI performs structured, preliminary computer vision triage. Meteorological dispersion vectors forecast short-term downwind exposure corridors, and authority dispatchers review verified evidence with clear statutory audit trails.
+**AirLens AI** bridges citizen environmental vigilance with rapid municipal action. Citizens capture smartphone photos of visible smoke, dust, or burning. Google OpenAI AI performs structured, preliminary computer vision triage. Meteorological dispersion vectors forecast short-term downwind exposure corridors, and authority dispatchers review verified evidence with clear statutory audit trails.
 
 ## 2. Key Capabilities & Features
 
@@ -16,10 +16,10 @@ Air quality in metropolitan areas is often measured only by widely dispersed gov
 - **Multi-source photo upload:** Device file picker, mobile camera capture, drag-and-drop, or 1-click test with pre-curated realistic sample incident photos.
 - **Categorization:** Smoke Plume, Road / Silt Dust, Waste Burning, Construction Activity, Industrial Emissions, Other.
 - **Geospatial Pin Drop:** Interactive map coordinate selection or one-click browser GPS positioning.
-- **Gemini Preliminary Vision Triage:** Rapid visual analysis before submission that confirms plume presence, confidence score, and suggests category corrections.
+- **OpenAI Preliminary Vision Triage:** Rapid visual analysis before submission that confirms plume presence, confidence score, and suggests category corrections.
 - **Encrypted Citizen Privacy:** Contact details are strictly restricted to municipal dispatchers and omitted from public maps.
 
-### B. Google Gemini 3.8 Flash Multimodal AI
+### B. Google OpenAI 3.8 Flash Multimodal AI
 - **Strict Responsible AI Boundary:** AI strictly analyzes *visible optical indicators* (plume opacity, particulate geometry, ground carryover). It **never** claims to calculate chemical PPM concentrations (e.g., SOx/NOx) or certified AQI values from photos alone.
 - **Structured JSON Schema:** Evaluates confidence, visible smoke or dust presence, recommended field actions, and limitations.
 - **Operational Briefing Generator:** Transforms incident reports into tactical summaries for municipal squads and Pollution Control Board (PCB) officers.
@@ -50,7 +50,7 @@ Air quality in metropolitan areas is often measured only by widely dispersed gov
 
 - **Frontend:** React 19, TypeScript, Tailwind CSS, Lucide Icons, Recharts, Motion.
 - **Backend & Middleware:** Node.js, Express, tsx.
-- **AI Services:** `@google/genai` TypeScript SDK (calling `gemini-3.8-flash` on server-side).
+- **AI Services:** `@google/genai` TypeScript SDK (calling `OpenAI-3.8-flash` on server-side).
 - **Meteorological & Air Quality APIs:** Open-Meteo Live Forecast API & Open-Meteo European/US EPA Air Quality Model.
 
 ## 4. Setup & Running Locally
@@ -87,9 +87,9 @@ Open `http://localhost:3000` in your browser.
 Copy `.env.example` to `.env`:
 
 ```env
-# GEMINI_API_KEY: Optional for live Google Gemini 3.8 Flash model calls.
+# OpenAI_API_KEY: Optional for live Google OpenAI 3.8 Flash model calls.
 # If omitted, AirLens AI runs in full demo mode with intelligent fallback heuristics.
-GEMINI_API_KEY="your-gemini-api-key"
+OpenAI_API_KEY="your-OpenAI-api-key"
 
 # Port (default 3000)
 PORT=3000
@@ -97,7 +97,7 @@ PORT=3000
 
 ## 6. Responsible AI & Ethical Boundaries
 
-1. **Visible Indicators Only:** Gemini analyzes photographic patterns (optical opacity, plume geometry, unshielded piles).
+1. **Visible Indicators Only:** OpenAI analyzes photographic patterns (optical opacity, plume geometry, unshielded piles).
 2. **No False Sensor Claims:** The platform never claims a smartphone photo replaces calibrated PM2.5 laser photometers or gas chromatography.
 3. **Citizen Privacy Protected:** Personal contact info is strictly walled from public map views.
 4. **Transparent Risk Reasoning:** Every calculated risk score explains the exact weights and meteorological inputs behind it.
