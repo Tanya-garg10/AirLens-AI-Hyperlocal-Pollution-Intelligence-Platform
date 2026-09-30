@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import 'dotenv/config';
-import { GoogleGenAI, Type } from '@google/genai';
+import OpenAI from 'openai';
 import { createServer as createViteServer } from 'vite';
 import { 
   PollutionReport, 
@@ -40,26 +40,19 @@ app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 let reportsStore: PollutionReport[] = JSON.parse(JSON.stringify(INITIAL_REPORTS));
 let notificationsStore: InAppNotification[] = JSON.parse(JSON.stringify(INITIAL_NOTIFICATIONS));
 
-// Initialize Gemini Client
-const geminiApiKey = process.env.GEMINI_API_KEY;
-let aiClient: GoogleGenAI | null = null;
+// Initialize OpenAI Client
+const openaiApiKey = process.env.OPENAI_API_KEY;
+let aiClient: OpenAI | null = null;
 
-if (geminiApiKey && geminiApiKey !== 'MY_GEMINI_API_KEY') {
+if (openaiApiKey && openaiApiKey !== 'MY_OPENAI_API_KEY') {
   try {
-    aiClient = new GoogleGenAI({
-      apiKey: geminiApiKey,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build'
-        }
-      }
-    });
-    console.log('[AirLens AI] Gemini AI initialized successfully on server-side.');
+    aiClient = new OpenAI({ apiKey: openaiApiKey });
+    console.log('[AirLens AI] OpenAI client initialized successfully.');
   } catch (err) {
-    console.warn('[AirLens AI] Failed to initialize Gemini AI client:', err);
+    console.warn('[AirLens AI] Failed to initialize OpenAI client:', err);
   }
 } else {
-  console.log('[AirLens AI] GEMINI_API_KEY not configured. Intelligent fallback mode enabled.');
+  console.log('[AirLens AI] OPENAI_API_KEY not configured. Intelligent fallback mode enabled.');
 }
 
 // Distance calculation between 2 coordinates in kilometers (Haversine Formula)
@@ -179,12 +172,11 @@ app.post('/api/ai/analyze-image', async (req: Request, res: Response): Promise<v
       if (match) mimeType = match[1];
     }
 
-    // Check if Gemini AI is available
+    // Check if OpenAI client is available
     if (aiClient) {
       try {
-        console.log('[AirLens AI] Calling Gemini 3.8 Flash for visual pollution analysis...');
-        const promptText = `
-You are the AirLens AI vision specialist for visible environmental pollution observations.
+        console.log('[AirLens AI] Calling GPT-4o for visual pollution analysis...');
+        const promptText = `You are the AirLens AI vision specialist for visible environmental pollution observations.
 Examine the user-submitted photograph for visible environmental indicators.
 
 User provided context:
@@ -197,88 +189,34 @@ CRITICAL RESPONSIBLE AI DIRECTIVES:
 2. DO NOT claim to measure chemical concentration, PPM, or exact AQI values from an image alone.
 3. Use cautious, objective language: 'possible smoke-like plume visible', 'suspended particulate haze consistent with dust', 'uncombusted organic biomass signature'.
 4. Note any image limitations (e.g., lighting, angle, distance, optical opacity).
-5. Output purely valid JSON adhering to the specified schema.
-        `;
+5. Output ONLY valid JSON with these exact keys: observed_visual_indicators (array of strings), possible_category (one of: smoke|dust|waste_burning|construction_activity|industrial_emissions|other), visible_smoke_or_dust (boolean), confidence (0.0-1.0), image_limitations (string), recommended_follow_up (string), executive_summary (string), estimated_spread_risk (one of: Low|Moderate|Elevated).`;
 
-        const response = await aiClient.models.generateContent({
-          model: 'gemini-3.8-flash',
-          contents: {
-            parts: [
-              {
-                inlineData: {
-                  mimeType,
-                  data: cleanBase64
-                }
-              },
-              { text: promptText }
-            ]
-          },
-          config: {
-            responseMimeType: 'application/json',
-            responseSchema: {
-              type: Type.OBJECT,
-              properties: {
-                observed_visual_indicators: {
-                  type: Type.ARRAY,
-                  items: { type: Type.STRING },
-                  description: 'List of visible physical indicators observed in the image.'
+        const response = await aiClient.chat.completions.create({
+          model: 'gpt-4o',
+          response_format: { type: 'json_object' },
+          messages: [
+            {
+              role: 'user',
+              content: [
+                {
+                  type: 'image_url',
+                  image_url: { url: `data:${mimeType};base64,${cleanBase64}` }
                 },
-                possible_category: {
-                  type: Type.STRING,
-                  enum: ['smoke', 'dust', 'waste_burning', 'construction_activity', 'industrial_emissions', 'other'],
-                  description: 'Suggested category based on visual signatures.'
-                },
-                visible_smoke_or_dust: {
-                  type: Type.BOOLEAN,
-                  description: 'True if visible particulate plume, dust cloud, or smoke column is present.'
-                },
-                confidence: {
-                  type: Type.NUMBER,
-                  description: 'Confidence score between 0.0 and 1.0.'
-                },
-                image_limitations: {
-                  type: Type.STRING,
-                  description: 'Camera distance, lighting, angle, or lack of sensor measurements.'
-                },
-                recommended_follow_up: {
-                  type: Type.STRING,
-                  description: 'Actionable recommended investigation or mitigation step.'
-                },
-                executive_summary: {
-                  type: Type.STRING,
-                  description: 'Short 1-2 sentence executive observation summary.'
-                },
-                estimated_spread_risk: {
-                  type: Type.STRING,
-                  enum: ['Low', 'Moderate', 'Elevated'],
-                  description: 'Preliminary visual dispersion spread risk.'
-                }
-              },
-              required: [
-                'observed_visual_indicators',
-                'possible_category',
-                'visible_smoke_or_dust',
-                'confidence',
-                'image_limitations',
-                'recommended_follow_up',
-                'executive_summary',
-                'estimated_spread_risk'
+                { type: 'text', text: promptText }
               ]
             }
-          }
+          ],
+          max_tokens: 800
         });
 
-        const textOutput = response.text;
+        const textOutput = response.choices[0]?.message?.content;
         if (textOutput) {
           const parsed = JSON.parse(textOutput);
-          res.json({
-            ...parsed,
-            is_simulated: false
-          });
+          res.json({ ...parsed, is_simulated: false });
           return;
         }
-      } catch (geminiError: any) {
-        console.warn('[AirLens AI] Gemini API call failed, activating graceful fallback:', geminiError?.message || geminiError);
+      } catch (openaiError: any) {
+        console.warn('[AirLens AI] OpenAI API call failed, activating graceful fallback:', openaiError?.message || openaiError);
       }
     }
 
@@ -342,8 +280,7 @@ app.post('/api/ai/briefing', async (req: Request, res: Response): Promise<void> 
 
     if (aiClient && incidentData) {
       try {
-        const prompt = `
-You are the AirLens AI Senior Environmental Intelligence Analyst.
+        const prompt = `You are the AirLens AI Senior Environmental Intelligence Analyst.
 Prepare an executive operational briefing for Municipal Authorities and the Pollution Control Board.
 
 Incident Context:
@@ -358,18 +295,18 @@ Generate a concise 3-part operational brief:
 1. SITUATION SUMMARY: (2 sentences on visible evidence and public exposure risk)
 2. IMMEDIATE MITIGATION ACTIONS: (3 tactical steps for field officers)
 3. REGULATORY JURISDICTION: (Which municipal or environmental agency should lead)
-Keep tone professional, urgent yet objective, avoiding unverified claims.
-        `;
+Keep tone professional, urgent yet objective, avoiding unverified claims.`;
 
-        const response = await aiClient.models.generateContent({
-          model: 'gemini-3.8-flash',
-          contents: prompt
+        const response = await aiClient.chat.completions.create({
+          model: 'gpt-4o',
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: 600
         });
 
-        res.json({ briefing: response.text, is_simulated: false });
+        res.json({ briefing: response.choices[0]?.message?.content, is_simulated: false });
         return;
       } catch (err) {
-        console.warn('[AirLens AI] Gemini briefing failed, using fallback:', err);
+        console.warn('[AirLens AI] OpenAI briefing failed, using fallback:', err);
       }
     }
 
@@ -918,11 +855,10 @@ app.post('/api/ai/copilot', async (req: Request, res: Response): Promise<void> =
       hotspotSummary: clusters.slice(0, 3).map(c => `${c.hotspotLabel} [Risk: ${c.riskLevel}, Reports: ${c.reportCount}]`)
     };
 
-    // Attempt Gemini 3.8 Flash call
+    // Attempt OpenAI GPT-4o call
     if (aiClient) {
       try {
-        const systemPrompt = `
-You are the AirLens AI Environmental Intelligence Copilot.
+        const systemPrompt = `You are the AirLens AI Environmental Intelligence Copilot.
 You have direct, real-time access to citizen pollution reports, spatial hotspots, and environmental data for ${currentCity.name}.
 Answer the user's inquiry directly, concisely, and helpfully.
 Support Hindi, Hinglish, or English seamlessly matching the user's language.
@@ -942,23 +878,26 @@ GUIDELINES:
 1. Refer to actual report IDs (e.g., AL-2026-XXXX) or real locations from the context above.
 2. If the user asks in Hindi or Hinglish, reply naturally in clear Hindi or Hinglish.
 3. Keep answers action-oriented, professional, and grounded. Never fabricate data outside the provided context.
-4. Suggest next navigation actions if helpful (e.g. "Authority Center", "Pollution Map", "Report Pollution").
-        `;
+4. Suggest next navigation actions if helpful (e.g. "Authority Center", "Pollution Map", "Report Pollution").`;
 
-        const response = await aiClient.models.generateContent({
-          model: 'gemini-3.8-flash',
-          contents: `${systemPrompt}\n\nUser Question: ${query}`
+        const response = await aiClient.chat.completions.create({
+          model: 'gpt-4o',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: query }
+          ],
+          max_tokens: 800
         });
 
-        const reply = response.text || "AirLens Copilot was unable to formulate a response.";
+        const reply = response.choices[0]?.message?.content || "AirLens Copilot was unable to formulate a response.";
         res.json({
           response: reply,
           groundedReports: highPriorityReports.slice(0, 3).map(r => r.id),
           is_simulated: false
         });
         return;
-      } catch (geminiErr: any) {
-        console.warn('[AirLens AI] Copilot Gemini call failed, activating grounded fallback:', geminiErr?.message);
+      } catch (openaiErr: any) {
+        console.warn('[AirLens AI] Copilot OpenAI call failed, activating grounded fallback:', openaiErr?.message);
       }
     }
 
@@ -1350,8 +1289,7 @@ app.post('/api/ai/executive-report', async (req: Request, res: Response): Promis
 
     if (aiClient) {
       try {
-        const prompt = `
-You are the Chief Environmental Operations Officer for AirLens AI.
+        const prompt = `You are the Chief Environmental Operations Officer for AirLens AI.
 Generate a structured, authoritative Executive Environmental Report for municipal leadership and the Pollution Control Authority.
 
 Data:
@@ -1361,25 +1299,18 @@ Data:
 - Verified / Resolved Incidents: ${resolvedReports.length} (${resolutionRate}% resolution rate)
 - Key Hotspot Zones: ${topHotspots.map(h => `${h.name}: ${h.count} reports (${h.dominantCategory})`).join(', ')}
 
-Please output valid JSON matching this schema:
-{
-  "executiveSummary": "2-3 sentences providing high-level operational analysis of emissions and air quality conditions.",
-  "keyFindings": ["3 key bullet observations of environmental conditions"],
-  "recommendations": ["3 tactical recommendations for municipal taskforces"],
-  "regulatoryCitations": ["2 relevant regulatory directives or guidelines e.g. CPCB GRAP Stage, EPA Clean Air Standard"]
-}
-        `;
+Output ONLY valid JSON with these exact keys: executiveSummary (string, 2-3 sentences), keyFindings (array of 3 strings), recommendations (array of 3 strings), regulatoryCitations (array of 2 strings).`;
 
-        const response = await aiClient.models.generateContent({
-          model: 'gemini-3.8-flash',
-          contents: prompt,
-          config: {
-            responseMimeType: 'application/json'
-          }
+        const response = await aiClient.chat.completions.create({
+          model: 'gpt-4o',
+          response_format: { type: 'json_object' },
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: 800
         });
 
-        if (response.text) {
-          const parsed = JSON.parse(response.text);
+        const textOutput = response.choices[0]?.message?.content;
+        if (textOutput) {
+          const parsed = JSON.parse(textOutput);
           const fullReport: AIExecutiveReport = {
             generatedAt: new Date().toISOString(),
             city: currentCity.name,
@@ -1398,7 +1329,7 @@ Please output valid JSON matching this schema:
           return;
         }
       } catch (geminiErr: any) {
-        console.warn('[AirLens AI] Executive report Gemini call failed, activating fallback:', geminiErr?.message);
+        console.warn('[AirLens AI] Executive report OpenAI call failed, activating fallback:', geminiErr?.message);
       }
     }
 
